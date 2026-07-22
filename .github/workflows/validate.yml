@@ -9,4 +9,10 @@ jobs:
     uses: home-assistant/actions/.github/workflows/hassfest.yml@master
 
   hacs:
-    uses: hacs/action/.github/workflows/hacs.yml@main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: HACS validation
+        uses: hacs/action@main
+        with:
+          category: integration
