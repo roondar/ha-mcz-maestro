@@ -6,7 +6,11 @@ on:
 
 jobs:
   hassfest:
-    uses: home-assistant/actions/.github/workflows/hassfest.yml@master
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: hassfest validation
+        uses: home-assistant/actions/hassfest@master
 
   hacs:
     runs-on: ubuntu-latest
