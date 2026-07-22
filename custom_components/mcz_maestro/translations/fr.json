@@ -1,0 +1,63 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connexion au poêle MCZ Maestro",
+        "description": "Connexion directe au WebSocket local du module Maestro.",
+        "data": {"host": "Hôte", "port": "Port"}
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossible de se connecter au poêle",
+      "invalid_response": "Le poêle a renvoyé une trame d'information invalide"
+    },
+    "abort": {"already_configured": "Ce poêle est déjà configuré"}
+  },
+  "entity": {
+    "binary_sensor": {
+      "connection": {"name": "Connexion"},
+      "alarm": {"name": "Alarme"},
+      "ambient_probe_problem": {"name": "Défaut de la sonde ambiante"}
+    },
+    "button": {
+      "refresh": {"name": "Rafraîchir"},
+      "sync_time": {"name": "Synchroniser l'heure"}
+    },
+    "climate": {"stove": {"name": "Poêle"}},
+    "select": {
+      "power_level": {
+        "name": "Puissance manuelle",
+        "state": {
+          "power_1": "P1", "power_2": "P2", "power_3": "P3",
+          "power_4": "P4", "power_5": "P5"
+        }
+      },
+      "fan_front": {
+        "name": "Ventilateur frontal",
+        "state": {"off": "Arrêt", "level_1": "1", "level_2": "2", "level_3": "3", "level_4": "4", "level_5": "5", "auto": "Auto"}
+      },
+      "fan_ducted_1": {
+        "name": "Ventilateur canalisé 1",
+        "state": {"off": "Arrêt", "level_1": "1", "level_2": "2", "level_3": "3", "level_4": "4", "level_5": "5", "auto": "Auto"}
+      },
+      "fan_ducted_2": {
+        "name": "Ventilateur canalisé 2",
+        "state": {"off": "Arrêt", "level_1": "1", "level_2": "2", "level_3": "3", "level_4": "4", "level_5": "5", "auto": "Auto"}
+      }
+    },
+    "sensor": {
+      "stove_state": {"name": "État du poêle"},
+      "ambient_temperature": {"name": "Température ambiante"},
+      "fume_temperature": {"name": "Température des fumées"},
+      "motherboard_temperature": {"name": "Température de la carte mère"},
+      "total_operating_hours": {"name": "Durée totale de fonctionnement"},
+      "hours_to_service": {"name": "Temps avant entretien"},
+      "number_of_ignitions": {"name": "Nombre d'allumages"}
+    },
+    "switch": {
+      "control_mode": {"name": "Mode automatique (Dynamic)"},
+      "eco_mode": {"name": "Mode Eco"},
+      "silent_mode": {"name": "Mode silencieux"}
+    }
+  }
+}

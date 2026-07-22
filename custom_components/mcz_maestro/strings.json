@@ -1,0 +1,73 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to MCZ Maestro",
+        "description": "Connect directly to the stove's local Maestro WebSocket.",
+        "data": {
+          "host": "Host",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to connect to the stove",
+      "invalid_response": "The stove returned an invalid information frame"
+    },
+    "abort": {
+      "already_configured": "This stove is already configured"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "connection": {"name": "Connection"},
+      "alarm": {"name": "Alarm"},
+      "ambient_probe_problem": {"name": "Ambient probe problem"}
+    },
+    "button": {
+      "refresh": {"name": "Refresh"},
+      "sync_time": {"name": "Synchronize time"}
+    },
+    "climate": {
+      "stove": {"name": "Stove"}
+    },
+    "select": {
+      "power_level": {
+        "name": "Manual power level",
+        "state": {
+          "power_1": "P1",
+          "power_2": "P2",
+          "power_3": "P3",
+          "power_4": "P4",
+          "power_5": "P5"
+        }
+      },
+      "fan_front": {
+        "name": "Front fan",
+        "state": {"off": "Off", "level_1": "1", "level_2": "2", "level_3": "3", "level_4": "4", "level_5": "5", "auto": "Auto"}
+      },
+      "fan_ducted_1": {
+        "name": "Ducted fan 1",
+        "state": {"off": "Off", "level_1": "1", "level_2": "2", "level_3": "3", "level_4": "4", "level_5": "5", "auto": "Auto"}
+      },
+      "fan_ducted_2": {
+        "name": "Ducted fan 2",
+        "state": {"off": "Off", "level_1": "1", "level_2": "2", "level_3": "3", "level_4": "4", "level_5": "5", "auto": "Auto"}
+      }
+    },
+    "sensor": {
+      "stove_state": {"name": "Stove state"},
+      "ambient_temperature": {"name": "Ambient temperature"},
+      "fume_temperature": {"name": "Fume temperature"},
+      "motherboard_temperature": {"name": "Motherboard temperature"},
+      "total_operating_hours": {"name": "Total operating time"},
+      "hours_to_service": {"name": "Time until service"},
+      "number_of_ignitions": {"name": "Number of ignitions"}
+    },
+    "switch": {
+      "control_mode": {"name": "Automatic mode (Dynamic)"},
+      "eco_mode": {"name": "Eco mode"},
+      "silent_mode": {"name": "Silent mode"}
+    }
+  }
+}
