@@ -1,0 +1,12 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  hassfest:
+    uses: home-assistant/actions/.github/workflows/hassfest.yml@master
+
+  hacs:
+    uses: hacs/action/.github/workflows/hacs.yml@main
