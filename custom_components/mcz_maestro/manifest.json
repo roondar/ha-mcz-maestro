@@ -3,6 +3,8 @@
   "name": "MCZ Maestro",
   "codeowners": [],
   "config_flow": true,
+  "documentation": "https://github.com/roondar/ha-mcz-maestro",
+  "issue_tracker": "https://github.com/roondar/ha-mcz-maestro/issues",
   "iot_class": "local_polling",
   "requirements": [],
   "version": "0.2.6"
