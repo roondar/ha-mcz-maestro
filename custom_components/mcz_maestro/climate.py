@@ -41,7 +41,7 @@ class MaestroClimate(MaestroEntity, ClimateEntity):
     """Represent the stove as a Home Assistant climate entity."""
 
     _attr_translation_key = "stove"
-    _attr_temperature_unit = UnitOfTemperature.CELSIUS
+    _attr_native_temperature_unit = UnitOfTemperature.CELSIUS
     _attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT]
     _attr_min_temp = 5
     _attr_max_temp = 35
@@ -63,11 +63,11 @@ class MaestroClimate(MaestroEntity, ClimateEntity):
         self._attr_precision = coordinator.parameters.target_temperature_step
 
     @property
-    def current_temperature(self) -> float | None:
+    def native_current_temperature(self) -> float | None:
         return self.coordinator.data.values.get("ambient_temperature")
 
     @property
-    def target_temperature(self) -> float | None:
+    def native_target_temperature(self) -> float | None:
         return self.coordinator.data.values.get("target_temperature")
 
     @property
