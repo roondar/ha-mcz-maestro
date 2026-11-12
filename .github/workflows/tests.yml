@@ -1,0 +1,36 @@
+name: Unit tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install test dependencies (no Home Assistant, no stove)
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install aiohttp "python-socketio==5.18.1" pytest pytest-asyncio ruff
+      - name: Static checks
+        run: |
+          python -m compileall -q custom_components/mcz_maestro tests
+          ruff check custom_components/mcz_maestro tests --select E4,E7,E9,F --ignore E731
+      - name: In-memory relay and direct transport regression tests
+        run: python -m pytest -q
+
+  home-assistant-options:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Install isolated Home Assistant test dependencies
+        run: python -m pip install 'homeassistant==2026.11.1' 'python-socketio==5.18.1' pytest pytest-asyncio
+      - name: Exercise options forms with Home Assistant 2026.11.1
+        run: python -m pytest -q tests/test_ha_options.py

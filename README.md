@@ -1,7 +1,6 @@
 # MCZ Maestro for Home Assistant
 
-Local Home Assistant integration for MCZ pellet stoves using the Maestro
-WebSocket protocol directly. It does not require MaestroGateway or MQTT.
+Home Assistant integration for MCZ pellet stoves with **one selectable connection**: native Maestro WebSocket or the local Socket.IO relay [roondar/mcz-cloud-local](https://github.com/roondar/mcz-cloud-local). No MQTT, bridge or additional HA entity is required.
 
 > [!WARNING]
 > This is an independent community integration, not an official MCZ product.
@@ -61,8 +60,42 @@ In Home Assistant, select **Settings → Devices & services → Add integration*
 search for **MCZ Maestro**, then enter the local host and port of the Maestro
 module. The default direct-Wi-Fi endpoint is `192.168.120.1:81`.
 
-Only one controller should be connected to the local Maestro WebSocket. Stop
-MaestroGateway before enabling this integration.
+Only one HA transport is active at a time. The relay can continue serving the
+MCZ Android app in parallel with Home Assistant.
+
+### Switch an existing installation without losing entities
+
+1. Update the integration from HACS **only after the PR is merged and deployment approved**.
+2. Go to **Settings → Devices & services → MCZ Maestro → Configure**.
+3. Select **Cloud local — MCZ Socket.IO relay**.
+4. Enter the relay host (default `192.168.1.252`) and port (`9000`).
+5. Enter the stove **serial number** and **MAC address** in the password fields
+   (exactly the same formatting as the relay's private identity file).
+   Leave these fields blank on later visits to keep the existing values.
+6. Submit. Home Assistant unloads the old client, loads only the selected
+   transport and verifies `RecuperoParametri` + `RecuperoInfo` during setup.
+   If setup fails, the entry reports an error; **no command is sent**.
+7. Check the connection entity and the existing Chauffage, Réglages and
+   Diagnostic views. Test a simple temperature change only with human approval.
+
+**Existing version 0.2.6 entries default to Direct**, retaining their original
+`host`, `port`, config-entry unique ID, device identifiers and entity IDs.
+Both sets of connection settings are kept separately in the entry options.
+The cloud identity is stored only in Home Assistant's config entry options,
+not in YAML, Git, diagnostics or logs. Treat HA backups as confidential.
+
+**Rollback:** In the same Configure dialog, choose **Direct** and use the
+saved stove host and port. If the integration does not load, revert HACS to
+the previous version and restart HA (the original `data.host` / `data.port`
+are never migrated or deleted). Do not remove/re-add the integration.
+
+The Options Flow validates field formats without opening a second connection.
+The actual connection/read test runs on the exclusive entry reload. A failed
+connection is never followed by an automatic write retry.
+
+Only one controller should be connected to the **native** Maestro WebSocket.
+Stop MaestroGateway before connecting directly. The local relay's guarded
+write policy remains authoritative for Cloud mode.
 
 ## Operating modes
 

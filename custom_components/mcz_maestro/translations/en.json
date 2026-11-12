@@ -4,60 +4,168 @@
       "user": {
         "title": "Connect to MCZ Maestro",
         "description": "Connect directly to the stove's local Maestro WebSocket.",
-        "data": {"host": "Host", "port": "Port"}
+        "data": {
+          "host": "Host",
+          "port": "Port"
+        }
       }
     },
     "error": {
       "cannot_connect": "Unable to connect to the stove",
       "invalid_response": "The stove returned an invalid information frame"
     },
-    "abort": {"already_configured": "This stove is already configured"}
+    "abort": {
+      "already_configured": "This stove is already configured"
+    }
   },
   "entity": {
     "binary_sensor": {
-      "connection": {"name": "Connection"},
-      "alarm": {"name": "Alarm"},
-      "ambient_probe_problem": {"name": "Ambient probe problem"}
+      "connection": {
+        "name": "Connection"
+      },
+      "alarm": {
+        "name": "Alarm"
+      },
+      "ambient_probe_problem": {
+        "name": "Ambient probe problem"
+      }
     },
     "button": {
-      "refresh": {"name": "Refresh"},
-      "sync_time": {"name": "Synchronize time"}
+      "refresh": {
+        "name": "Refresh"
+      },
+      "sync_time": {
+        "name": "Synchronize time"
+      }
     },
-    "climate": {"stove": {"name": "Stove"}},
+    "climate": {
+      "stove": {
+        "name": "Stove"
+      }
+    },
     "select": {
       "power_level": {
         "name": "Manual power level",
         "state": {
-          "power_1": "P1", "power_2": "P2", "power_3": "P3",
-          "power_4": "P4", "power_5": "P5"
+          "power_1": "P1",
+          "power_2": "P2",
+          "power_3": "P3",
+          "power_4": "P4",
+          "power_5": "P5"
         }
       },
       "fan_front": {
         "name": "Front fan",
-        "state": {"off": "Off", "level_1": "1", "level_2": "2", "level_3": "3", "level_4": "4", "level_5": "5", "auto": "Auto"}
+        "state": {
+          "off": "Off",
+          "level_1": "1",
+          "level_2": "2",
+          "level_3": "3",
+          "level_4": "4",
+          "level_5": "5",
+          "auto": "Auto"
+        }
       },
       "fan_ducted_1": {
         "name": "Ducted fan 1",
-        "state": {"off": "Off", "level_1": "1", "level_2": "2", "level_3": "3", "level_4": "4", "level_5": "5", "auto": "Auto"}
+        "state": {
+          "off": "Off",
+          "level_1": "1",
+          "level_2": "2",
+          "level_3": "3",
+          "level_4": "4",
+          "level_5": "5",
+          "auto": "Auto"
+        }
       },
       "fan_ducted_2": {
         "name": "Ducted fan 2",
-        "state": {"off": "Off", "level_1": "1", "level_2": "2", "level_3": "3", "level_4": "4", "level_5": "5", "auto": "Auto"}
+        "state": {
+          "off": "Off",
+          "level_1": "1",
+          "level_2": "2",
+          "level_3": "3",
+          "level_4": "4",
+          "level_5": "5",
+          "auto": "Auto"
+        }
       }
     },
     "sensor": {
-      "stove_state": {"name": "Stove state"},
-      "ambient_temperature": {"name": "Ambient temperature"},
-      "fume_temperature": {"name": "Fume temperature"},
-      "motherboard_temperature": {"name": "Motherboard temperature"},
-      "total_operating_hours": {"name": "Total operating time"},
-      "hours_to_service": {"name": "Time until service"},
-      "number_of_ignitions": {"name": "Number of ignitions"}
+      "stove_state": {
+        "name": "Stove state"
+      },
+      "ambient_temperature": {
+        "name": "Ambient temperature"
+      },
+      "fume_temperature": {
+        "name": "Fume temperature"
+      },
+      "motherboard_temperature": {
+        "name": "Motherboard temperature"
+      },
+      "total_operating_hours": {
+        "name": "Total operating time"
+      },
+      "hours_to_service": {
+        "name": "Time until service"
+      },
+      "number_of_ignitions": {
+        "name": "Number of ignitions"
+      }
     },
     "switch": {
-      "control_mode": {"name": "Automatic mode (Dynamic)"},
-      "eco_mode": {"name": "Eco mode"},
-      "silent_mode": {"name": "Silent mode"}
+      "control_mode": {
+        "name": "Automatic mode (Dynamic)"
+      },
+      "eco_mode": {
+        "name": "Eco mode"
+      },
+      "silent_mode": {
+        "name": "Silent mode"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Connection mode",
+        "description": "Choose one HA transport. The other connection is closed before reload.",
+        "data": {
+          "transport": "Transport"
+        }
+      },
+      "direct": {
+        "title": "Direct — native Maestro WebSocket",
+        "description": "Connection and readings are validated when the entry reloads.",
+        "data": {
+          "direct_host": "Stove host",
+          "direct_port": "Stove port"
+        }
+      },
+      "cloud": {
+        "title": "Cloud local — MCZ Socket.IO relay",
+        "description": "Leave credentials blank to keep saved values. The old connection is closed before the new one is tested on reload.",
+        "data": {
+          "cloud_host": "Relay host",
+          "cloud_port": "Relay port",
+          "cloud_serial_number": "MCZ serial number (leave blank to keep)",
+          "cloud_mac_address": "MCZ MAC address (leave blank to keep)"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Invalid host or IP address",
+      "missing_identity": "Serial number and MAC address are required.",
+      "invalid_identity": "Invalid serial number or MAC address."
+    }
+  },
+  "selector": {
+    "transport": {
+      "options": {
+        "direct": "Direct — native stove connection",
+        "cloud": "Cloud local — MCZ Socket.IO relay"
+      }
     }
   }
 }
