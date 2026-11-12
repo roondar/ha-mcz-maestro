@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime
+from dataclasses import replace
 import logging
 
 from aiohttp import ClientError
@@ -144,9 +145,12 @@ class MaestroRelayClient:
 
     async def async_request_parameters(self) -> MaestroParameters:
         """Read the real module's model parameters through the relay."""
-        return decode_parameters_message(
+        parameters = decode_parameters_message(
             await self._async_exchange(0, "RecuperoParametri")
         )
+        # This particular relay and stove have validated half-degree writes.
+        # Preserve the legacy direct transport's conservative one-degree step.
+        return replace(parameters, target_temperature_step=0.5)
 
     async def async_request_info(self) -> MaestroData:
         """Read a fresh full stove state through the relay."""
