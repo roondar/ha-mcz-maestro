@@ -111,3 +111,17 @@ async def test_cloud_startup_retries_after_relay_becomes_available():
 
     assert entry.unique_id == "192.168.120.1:81"
     assert entry.options["transport"] == "cloud"
+
+def test_climate_uses_native_temperature_properties():
+    """Climate values keep their semantics without HA's deprecated aliases."""
+    from custom_components.mcz_maestro.climate import MaestroClimate
+
+    assert "_attr_temperature_unit" not in MaestroClimate.__dict__
+    assert "current_temperature" not in MaestroClimate.__dict__
+    assert "target_temperature" not in MaestroClimate.__dict__
+
+    fake = SimpleNamespace(coordinator=SimpleNamespace(data=SimpleNamespace(
+        values={"ambient_temperature": 19.0, "target_temperature": 20.5}
+    )))
+    assert MaestroClimate.native_current_temperature.fget(fake) == 19.0
+    assert MaestroClimate.native_target_temperature.fget(fake) == 20.5
