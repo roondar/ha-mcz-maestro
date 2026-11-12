@@ -86,7 +86,8 @@ write** before switching. To undo, Reconfigure → `Direct` and restore the
 original host/port. **Do not remove and re-add the integration.**
 
 The mode switch reloads the *same config entry* and preserves its unique ID.
-In relay mode only, the climate target step is **0.5 °C** (validated with the\nowner's stove); Direct keeps its conservative 1 °C step.
+In relay mode only, the climate target step is **0.5 °C** (validated with the
+owner's stove); Direct keeps its conservative 1 °C step.
 
 All `climate.poele_mcz_maestro_stove`, sensors, selects, switches, dashboards,
 timers and existing automations keep their entity IDs. There is **one active
