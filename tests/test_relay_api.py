@@ -109,6 +109,7 @@ class TestRelayClient(unittest.IsolatedAsyncioTestCase):
             try:
                 params = await client.async_request_parameters()
                 self.assertEqual(params.target_temperature_max, 35)
+                self.assertEqual(params.target_temperature_step, 0.5)
                 state = await client.async_request_info()
                 self.assertEqual(state.values["target_temperature"], 20.0)
                 self.assertEqual(client.connection_generation, 1)
