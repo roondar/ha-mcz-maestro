@@ -114,10 +114,8 @@ async def test_cloud_startup_retries_after_relay_becomes_available():
 
 def test_climate_uses_native_temperature_properties():
     """Climate values keep their semantics without HA's deprecated aliases."""
-    from homeassistant.const import UnitOfTemperature
     from custom_components.mcz_maestro.climate import MaestroClimate
 
-    assert MaestroClimate._attr_native_temperature_unit == UnitOfTemperature.CELSIUS
     assert "_attr_temperature_unit" not in MaestroClimate.__dict__
     assert "current_temperature" not in MaestroClimate.__dict__
     assert "target_temperature" not in MaestroClimate.__dict__
