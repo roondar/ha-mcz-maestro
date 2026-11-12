@@ -350,3 +350,30 @@ def test_entity_identity_remains_entry_based():
     assert 'self._attr_unique_id = f"{entry.unique_id}_{entity_key}"' in entity
     assert 'identifiers={(DOMAIN, self._entry.unique_id or self._entry.entry_id)}' in entity
     assert "entry.data[CONF_HOST]" in (component / "__init__.py").read_text()
+
+
+@pytest.mark.asyncio
+async def test_half_degree_step_for_direct_and_cloud(relay):
+    """Both transports decode the same supported 0.5 °C target step."""
+    cloud = relay.client()
+
+    class DirectSession:
+        async def ws_connect(self, *args, **kwargs):
+            return direct_socket
+
+    direct_socket = FakeWebSocket()
+
+    async def receive_parameters():
+        return WSMessage(WSMsgType.TEXT, parameters_frame(), "")
+
+    direct_socket.receive = receive_parameters
+    direct = MaestroClient(DirectSession(), "192.168.120.1", 81)
+    try:
+        cloud_parameters = await cloud.async_request_parameters()
+        direct_parameters = await direct.async_request_parameters()
+        assert cloud_parameters.target_temperature_step == 0.5
+        assert direct_parameters.target_temperature_step == 0.5
+        assert "C|RecuperoParametri" in direct_socket.sent
+    finally:
+        await cloud.async_close()
+        await direct.async_close()

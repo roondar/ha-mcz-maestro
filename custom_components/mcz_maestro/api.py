@@ -193,9 +193,8 @@ def decode_parameters_message(message: str) -> MaestroParameters:
         raw=raw,
         target_temperature_min=float(target_min),
         target_temperature_max=float(target_max),
-        # The half-degree capability depends on a separate firmware frame.
-        # Use the universally supported integer step until that frame is validated.
-        target_temperature_step=1.0,
+        # Both native Maestro and local-cloud transports use half-degree values.
+        target_temperature_step=0.5,
         power_min=power_min,
         power_max=power_max,
         fan_coefficient=fan_coefficient,
