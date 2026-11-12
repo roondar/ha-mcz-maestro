@@ -5,7 +5,10 @@ from __future__ import annotations
 import re
 from typing import Any
 
-import voluptuous as vol
+try:
+    from homeassistant.data_entry_flow import probatio as vol
+except ImportError:  # Home Assistant versions before the schema migration.
+    import voluptuous as vol
 
 from homeassistant.config_entries import (
     ConfigEntry,
