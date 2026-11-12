@@ -61,8 +61,54 @@ In Home Assistant, select **Settings → Devices & services → Add integration*
 search for **MCZ Maestro**, then enter the local host and port of the Maestro
 module. The default direct-Wi-Fi endpoint is `192.168.120.1:81`.
 
-Only one controller should be connected to the local Maestro WebSocket. Stop
-MaestroGateway before enabling this integration.
+In Direct mode, only one controller should be connected to the local Maestro
+WebSocket. Stop MaestroGateway before enabling direct control. In Relay mode,
+HA and Android are separate clients of the same local Socket.IO relay.
+
+## Choose one connection mode — same Home Assistant entities
+
+**Direct Maestro (default / legacy):** connect to the stove's WebSocket
+(usually `192.168.120.1:81`). Existing entries without a connection mode
+continue to work exactly as before.
+
+**MCZ Cloud Local:** connect to the owner's Socket.IO relay
+(`http://<relay-host>:9000`, for example `192.168.1.252:9000`). The
+integration joins the relay as one `Android-App` client using the MCZ
+serial number and MAC address from the **local HA configuration form**.
+The relay retains exclusive ownership of its connection to the stove.
+
+For an **existing installation**, open **Settings → Devices & services →
+MCZ Maestro → three-dot menu → Reconfigure**, select `MCZ Cloud Local`,
+then enter the relay host, port, serial number and MAC address exactly as
+stored in the relay's private identity file. The form checks real
+`RecuperoParametri` and `RecuperoInfo` responses **without sending any
+write** before switching. To undo, Reconfigure → `Direct` and restore the
+original host/port. **Do not remove and re-add the integration.**
+
+The mode switch reloads the *same config entry* and preserves its unique ID.
+All `climate.poele_mcz_maestro_stove`, sensors, selects, switches, dashboards,
+timers and existing automations keep their entity IDs. There is **one active
+transport at a time**; HA does not try both or fail over automatically.
+
+The relay must have `MCZ_WRITES_ENABLED=true` to allow control; an empty
+write response or rejected command must never be assumed successful.
+The adapter waits for an ACK from the stove forwarded by the relay, then the
+existing HA coordinator confirms the new state with fresh reads (no retries
+of the write). The relay itself enforces a one-second global write interval
+and may refuse writes during transient/unsafe stove states.
+
+**Security:** the relay client is intentionally LAN/VPN-only, does not use
+public MCZ infrastructure, and expects the full MCZ identity. Enter that
+identity in Home Assistant only; never share it in issues, logs, commits or
+screenshots. The relay has no strong per-client authentication: keep its port
+restricted to your trusted network. The UI alone is not a security boundary.
+
+**Migration safety:** review and back up the HA integration configuration,
+make the first switch while the stove is in a stable state, read the
+connection sensor and other values, and only then use Android/HA controls.
+A failed validation leaves the old connection unchanged. Restoring Direct
+uses the existing local WebSocket code. None of this requires new dashboards
+or modifying automations.
 
 ## Operating modes
 
