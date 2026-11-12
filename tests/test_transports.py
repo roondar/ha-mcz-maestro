@@ -156,6 +156,7 @@ async def test_cloud_reads_and_connection_generation(relay):
         params = await client.async_request_parameters()
         data = await client.async_request_info()
         assert params.target_temperature_max == 35
+        assert params.target_temperature_step == 0.5
         assert data.values["ambient_temperature"] == 20.0
         assert client.connected
         assert client.connection_generation == 1
