@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime
+from dataclasses import replace
 
 import socketio
 
@@ -162,7 +163,9 @@ class MaestroCloudClient:
         """Fetch model safety parameters without changing stove state."""
         frame = await self._async_exchange(0, "RecuperoParametri")
         try:
-            return decode_parameters_message(frame)
+            # This stove's local-cloud path was validated with 0.5°C setpoints.
+            # Keep the legacy direct transport's conservative 1°C step.
+            return replace(decode_parameters_message(frame), target_temperature_step=0.5)
         except MaestroProtocolError:
             await self.async_close()
             raise
