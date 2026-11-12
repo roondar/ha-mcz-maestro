@@ -7,7 +7,18 @@ from typing import Any
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from .const import DOMAIN
+from .const import (
+    CONF_CLOUD_HOST,
+    CONF_CLOUD_PORT,
+    CONF_DEFAULT_CLOUD_HOST,
+    CONF_DEFAULT_CLOUD_PORT,
+    CONF_DIRECT_HOST,
+    CONF_DIRECT_PORT,
+    CONF_TRANSPORT,
+    DOMAIN,
+    TRANSPORT_CLOUD,
+    TRANSPORT_DIRECT,
+)
 from .coordinator import MaestroCoordinator
 
 
@@ -17,11 +28,23 @@ async def async_get_config_entry_diagnostics(
     """Return protocol state without credentials or command history."""
     coordinator: MaestroCoordinator = hass.data[DOMAIN][entry.entry_id]
     data = coordinator.data
+    transport = entry.options.get(CONF_TRANSPORT, TRANSPORT_DIRECT)
+    host = (
+        entry.options.get(CONF_CLOUD_HOST, CONF_DEFAULT_CLOUD_HOST)
+        if transport == TRANSPORT_CLOUD
+        else entry.options.get(CONF_DIRECT_HOST, entry.data["host"])
+    )
+    port = (
+        entry.options.get(CONF_CLOUD_PORT, CONF_DEFAULT_CLOUD_PORT)
+        if transport == TRANSPORT_CLOUD
+        else entry.options.get(CONF_DIRECT_PORT, entry.data["port"])
+    )
     return {
         "entry": {
             "title": entry.title,
-            "host": entry.data["host"],
-            "port": entry.data["port"],
+            "transport": transport,
+            "host": host,
+            "port": port,
         },
         "connected": coordinator.client.connected,
         "last_update_success": coordinator.last_update_success,

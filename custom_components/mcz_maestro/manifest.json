@@ -6,6 +6,8 @@
   "documentation": "https://github.com/roondar/ha-mcz-maestro",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/roondar/ha-mcz-maestro/issues",
-  "requirements": [],
-  "version": "0.2.6"
+  "requirements": [
+    "python-socketio==5.18.1"
+  ],
+  "version": "0.2.7"
 }

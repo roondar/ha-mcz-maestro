@@ -6,6 +6,18 @@ DOMAIN = "mcz_maestro"
 
 CONF_DEFAULT_HOST = "192.168.120.1"
 CONF_DEFAULT_PORT = 81
+CONF_DEFAULT_CLOUD_HOST = "192.168.1.252"
+CONF_DEFAULT_CLOUD_PORT = 9000
+
+CONF_TRANSPORT = "transport"
+TRANSPORT_DIRECT = "direct"
+TRANSPORT_CLOUD = "cloud"
+CONF_DIRECT_HOST = "direct_host"
+CONF_DIRECT_PORT = "direct_port"
+CONF_CLOUD_HOST = "cloud_host"
+CONF_CLOUD_PORT = "cloud_port"
+CONF_CLOUD_SERIAL = "cloud_serial_number"
+CONF_CLOUD_MAC = "cloud_mac_address"
 
 DEFAULT_NAME = "Poêle MCZ Maestro"
 POLL_INTERVAL = timedelta(seconds=15)

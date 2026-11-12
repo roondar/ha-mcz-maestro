@@ -13,6 +13,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import MaestroClient, MaestroData, MaestroError, MaestroParameters
+from .cloud import MaestroCloudClient
 from .const import (
     ALARM_STATES,
     COMMAND_CONFIRMATION_POLL_INTERVAL_SECONDS,
@@ -35,7 +36,7 @@ class MaestroCoordinator(DataUpdateCoordinator[MaestroData]):
     def __init__(
         self,
         hass: HomeAssistant,
-        client: MaestroClient,
+        client: MaestroClient | MaestroCloudClient,
         parameters: MaestroParameters,
     ) -> None:
         super().__init__(
