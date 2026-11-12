@@ -4,6 +4,15 @@ from datetime import timedelta
 
 DOMAIN = "mcz_maestro"
 
+CONF_CONNECTION_TYPE = "connection_type"
+CONNECTION_DIRECT = "direct"
+CONNECTION_RELAY = "relay"
+CONF_RELAY_HOST = "relay_host"
+CONF_RELAY_PORT = "relay_port"
+CONF_RELAY_SERIAL = "relay_serial_number"
+CONF_RELAY_MAC = "relay_mac_address"
+DEFAULT_RELAY_PORT = 9000
+
 CONF_DEFAULT_HOST = "192.168.120.1"
 CONF_DEFAULT_PORT = 81
 
