@@ -12,6 +12,7 @@ Home Assistant integration for MCZ pellet stoves with **one selectable connectio
 
 - Local polling over the Maestro WebSocket connection.
 - Climate entity for power and target temperature.
+- Target temperature adjustable in 0.5 °C increments in both Direct and Cloud local modes.
 - Dynamic/automatic and manual operating modes.
 - Manual P1–P5 power selection when Dynamic mode is disabled.
 - Front and ducted fan controls based on model capabilities.
