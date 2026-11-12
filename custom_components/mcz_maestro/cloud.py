@@ -100,17 +100,34 @@ class MaestroCloudClient:
             future.set_exception(MaestroConnectionError("Relais MCZ déconnecté"))
 
     async def _async_exchange(
-        self, call_type: int, command: str, *, write: bool = False
+        self, call_type: int, command: str, *, write: bool = False,
+        expected_generation: int | None = None,
     ) -> str:
         """Send one allowed relay request and wait for its correlated response."""
         async with self._io_lock:
-            await self._async_connect()
+            if write:
+                if not self.connected or (
+                    expected_generation is not None
+                    and self.connection_generation != expected_generation
+                ):
+                    raise MaestroConnectionError(
+                        "Commande refusée : connexion MCZ modifiée, actualiser l'état"
+                    )
+            else:
+                await self._async_connect()
             if write:
                 elapsed = (
                     asyncio.get_running_loop().time() - self._last_command_at
                 )
                 if elapsed < COMMAND_MIN_INTERVAL_SECONDS:
                     await asyncio.sleep(COMMAND_MIN_INTERVAL_SECONDS - elapsed)
+                if not self.connected or (
+                    expected_generation is not None
+                    and self.connection_generation != expected_generation
+                ):
+                    raise MaestroConnectionError(
+                        "Commande refusée : connexion MCZ modifiée, actualiser l'état"
+                    )
 
             loop = asyncio.get_running_loop()
             future: asyncio.Future[str] = loop.create_future()
@@ -159,17 +176,23 @@ class MaestroCloudClient:
             await self.async_close()
             raise
 
-    async def async_write_parameter(self, cell: int, value: int) -> None:
+    async def async_write_parameter(
+        self, cell: int, value: int, *, expected_generation: int | None = None
+    ) -> None:
         """Send one write; the coordinator confirms its application by reading."""
         await self._async_exchange(
-            1, f"C|WriteParametri|{cell}|{value}", write=True
+            1, f"C|WriteParametri|{cell}|{value}", write=True,
+            expected_generation=expected_generation,
         )
 
-    async def async_set_datetime(self, value: datetime | None = None) -> None:
+    async def async_set_datetime(
+        self, value: datetime | None = None, *, expected_generation: int | None = None
+    ) -> None:
         """Synchronize time only when the coordinator permits the operation."""
         value = value or datetime.now()
         await self._async_exchange(
-            1, f"C|SalvaDataOra|{value.strftime('%d%m%Y%H%M')}", write=True
+            1, f"C|SalvaDataOra|{value.strftime('%d%m%Y%H%M')}", write=True,
+            expected_generation=expected_generation,
         )
 
     async def async_close(self) -> None:

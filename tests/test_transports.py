@@ -234,6 +234,53 @@ async def test_disconnect_then_manual_read_reconnects(relay):
 
 
 @pytest.mark.asyncio
+async def test_write_after_disconnect_does_not_reconnect_or_send(relay):
+    client = relay.client()
+    await client.async_request_info()
+    generation = client.connection_generation
+    await client.async_close()
+    with pytest.raises(MaestroConnectionError):
+        await client.async_write_parameter(36, 1, expected_generation=generation)
+    assert relay.writes == []
+    assert not client.connected
+
+
+@pytest.mark.asyncio
+async def test_write_refuses_new_session_after_validation(relay):
+    client = relay.client()
+    try:
+        await client.async_request_info()
+        generation = client.connection_generation
+        await client.async_close()
+        await client.async_request_info()
+        assert client.connection_generation != generation
+        with pytest.raises(MaestroConnectionError):
+            await client.async_write_parameter(36, 1, expected_generation=generation)
+        assert relay.writes == []
+    finally:
+        await client.async_close()
+
+
+@pytest.mark.asyncio
+async def test_disconnect_during_write_rate_limit_is_not_replayed(relay):
+    client = relay.client()
+    try:
+        await client.async_request_info()
+        generation = client.connection_generation
+        client._last_command_at = asyncio.get_running_loop().time()
+        task = asyncio.create_task(
+            client.async_write_parameter(36, 1, expected_generation=generation)
+        )
+        await asyncio.sleep(0.05)
+        await relay.sio.disconnect(client._socket.get_sid("/"))
+        with pytest.raises(MaestroConnectionError):
+            await task
+        assert relay.writes == []
+    finally:
+        await client.async_close()
+
+
+@pytest.mark.asyncio
 async def test_simulated_android_and_ha_are_independent(relay):
     ha = relay.client()
     android = socketio.AsyncClient(reconnection=False)

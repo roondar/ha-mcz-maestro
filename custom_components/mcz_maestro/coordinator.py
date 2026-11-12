@@ -249,7 +249,12 @@ class MaestroCoordinator(DataUpdateCoordinator[MaestroData]):
             ):
                 await self.async_refresh()
             validator()
-            await self.client.async_write_parameter(cell, value)
+            if isinstance(self.client, MaestroCloudClient):
+                await self.client.async_write_parameter(
+                    cell, value, expected_generation=self._parameters_generation
+                )
+            else:
+                await self.client.async_write_parameter(cell, value)
             loop = asyncio.get_running_loop()
             confirmation_deadline = (
                 loop.time() + COMMAND_CONFIRMATION_TIMEOUT_SECONDS
@@ -274,6 +279,11 @@ class MaestroCoordinator(DataUpdateCoordinator[MaestroData]):
             ):
                 await self.async_refresh()
             self.validate_mode_change()
-            await self.client.async_set_datetime()
+            if isinstance(self.client, MaestroCloudClient):
+                await self.client.async_set_datetime(
+                    expected_generation=self._parameters_generation
+                )
+            else:
+                await self.client.async_set_datetime()
             await asyncio.sleep(1)
             await self.async_refresh()

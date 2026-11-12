@@ -49,7 +49,6 @@ async def async_get_config_entry_diagnostics(
         "connected": coordinator.client.connected,
         "last_update_success": coordinator.last_update_success,
         "values": data.values,
-        "raw": data.raw,
         "temperature_statuses": data.temperature_statuses,
         "safety": {
             "target_temperature_min": coordinator.parameters.target_temperature_min,
